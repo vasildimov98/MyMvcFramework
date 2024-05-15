@@ -1,11 +1,12 @@
-﻿using MyWebFramework.HTTP.Models;
+﻿using MyWebFramework.HTTP.Delegates;
+using MyWebFramework.HTTP.Models;
 
 namespace MyWebFramework.HTTP.Servers
 {
     public interface IHttpServer
     {
-        void AddRoute(string url, Func<HttpRequest, HttpResponse> handler);
+        void AddRoute(string url, HttpHandler handler);
 
-        void StartListening();
+        Task StartListeningAsync(int port);
     }
 }

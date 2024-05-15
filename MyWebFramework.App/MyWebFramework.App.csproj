@@ -8,9 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="root\home.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\MyWebFramework.Common\MyWebFramework.Common.csproj" />
+    <ProjectReference Include="..\MyWebFramework.HTTP\MyWebFramework.HTTP.csproj" />
   </ItemGroup>
 
 </Project>

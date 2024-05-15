@@ -1,10 +1,10 @@
-﻿var httpServer = new HttpServer();
+﻿using MyWebFramework.HTTP.Servers;
+using MyWebFramework.Common.Interactors;
 
-httpServer.AddRoute("/", HomePage);
-httpServer.AddRoute("/login", LoginPage);
-httpServer.AddRoute("/about", AboutPage)
+var consoleUserInteractor = new CosoleUserInteractor();
 
+var httpServer = new HttpServer(consoleUserInteractor);
 
+var webFrameworkStarter = new WebFrameworkStarter(httpServer);
 
-
-
+await webFrameworkStarter.StartAsync();

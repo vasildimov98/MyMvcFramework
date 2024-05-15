@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using MyWebFramework.HTTP.Models;
 
 namespace MyWebFramework.HTTP.Delegates
 {
-    internal class HttpHandler
-    {
-    }
+   public delegate HttpResponse HttpHandler(HttpRequest request);
 }

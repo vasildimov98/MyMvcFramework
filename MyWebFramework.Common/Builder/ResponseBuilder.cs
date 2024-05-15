@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace MyWebFramework.App.App
+namespace MyWebFramework.Common.Builder
 {
     internal class ResponseBuilder : IBuilder
     {
