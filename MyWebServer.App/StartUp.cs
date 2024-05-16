@@ -2,7 +2,7 @@
 using MyWebFramework.HTTP.Servers;
 using System.Text;
 
-internal class WebFrameworkStarter(IHttpServer httpServer)
+internal class StartUp(IHttpServer httpServer)
 {
     private readonly IHttpServer httpServer = httpServer;
 

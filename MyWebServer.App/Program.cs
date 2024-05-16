@@ -5,6 +5,6 @@ var consoleUserInteractor = new CosoleUserInteractor();
 
 var httpServer = new HttpServer(consoleUserInteractor);
 
-var webFrameworkStarter = new WebFrameworkStarter(httpServer);
+var startUp = new StartUp(httpServer);
 
-await webFrameworkStarter.StartAsync();
+await startUp.StartAsync();
