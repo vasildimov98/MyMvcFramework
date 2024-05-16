@@ -2,30 +2,36 @@
 using MyWebFramework.Common.Interactors;
 using MyWebFramework.HTTP.Delegates;
 using MyWebFramework.HTTP.Models;
+using MyWebFramework.Common.Builder;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 
 namespace MyWebFramework.HTTP.Servers
 {
     public class HttpServer(IUserInteractor userInteractor) : IHttpServer
     {
-        private readonly IDictionary<string, HttpHandler?> routesMap
-            = new Dictionary<string, HttpHandler?>();
+        private readonly IDictionary<string, HttpHandler> routesTable
+            = new Dictionary<string, HttpHandler>();
+        private readonly IUserInteractor userInteractor = userInteractor;
 
         public void AddRoute(string url, HttpHandler handler)
         {
-            if (!routesMap.ContainsKey(url))
+            if (!routesTable.ContainsKey(url))
             {
-                routesMap.Add(url, null);
+                routesTable.Add(url, handler);
+                return;
             }
 
-            routesMap[url] = handler;
+            routesTable[url] = handler;
         }
 
         public async Task StartListeningAsync(int port)
         {
-            using var tcpListener = new TcpListener(IPAddress.Loopback, port);
+            var tcpListener = new TcpListener(IPAddress.Loopback, port);
 
             tcpListener.Start();
 
@@ -34,12 +40,20 @@ namespace MyWebFramework.HTTP.Servers
 
             while (true)
             {
-                using var client = await tcpListener.AcceptTcpClientAsync();
-                _ = ProcessClientAsync(client);
+                var client = await tcpListener.AcceptTcpClientAsync();
+
+                try
+                {
+                    _ = ProcessClientAsync(client);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
         }
 
-        private static async Task ProcessClientAsync(TcpClient client)
+        private async Task ProcessClientAsync(TcpClient client)
         {
             using var stream = client.GetStream();
 
@@ -47,9 +61,51 @@ namespace MyWebFramework.HTTP.Servers
 
             var httpRequest = new HttpRequest(request);
 
-            Console.WriteLine(request);
+            userInteractor.ShowMessage(request);
 
-            Console.WriteLine(new string('=', 100));
+            userInteractor.ShowMessage(new string('=', 100));
+
+            var response = await SendReponseAsync(stream, httpRequest);
+
+            userInteractor.ShowMessage(response);
+
+            userInteractor.ShowMessage(new string('=', 100));
+
+            client.Close();
+        }
+
+        private async Task<string> SendReponseAsync(NetworkStream stream, HttpRequest request)
+        {
+            HttpResponse httpResponse;
+            if (!routesTable.TryGetValue(request.Path, out HttpHandler? value))
+            {
+                var notFoundHtml = "<h1>Page Not Found</h1>";
+                var notFoundByte = Encoding.UTF8.GetBytes(notFoundHtml);
+                httpResponse = new HttpResponse("text/html; charset=utf-8", notFoundByte, StatusCode.NotFound);
+            } 
+            else
+            {
+                var action = value;
+
+                httpResponse = action(request);
+
+                httpResponse.Headers.Add(new Header("Server", "VaskoServer 2024"));
+
+                //httpResponse.Cookies.Add(new ResponseCookie("sid", Guid.NewGuid().ToString())
+                //{
+                //    MaxAge = 4 * 24 * 60 * 60 * 60,
+                //    HttpOnly = true
+                //});
+            }
+
+            var responseAsString = httpResponse.ToString();
+
+            var byteResponse = Encoding.UTF8.GetBytes(responseAsString);
+
+            await stream.WriteAsync(byteResponse.AsMemory(0, byteResponse.Length));
+            await stream.WriteAsync(httpResponse.Body.AsMemory(0, httpResponse.Body.Length));
+
+            return responseAsString;
         }
 
         private static async Task<string> GetRequestAsync(NetworkStream stream)

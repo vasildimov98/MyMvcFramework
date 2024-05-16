@@ -6,7 +6,7 @@
 
         public ResponseBuilder AppendNewLine();
 
-        public string GetResponse();
+        public string GetResponseAsString();
 
     }
 }

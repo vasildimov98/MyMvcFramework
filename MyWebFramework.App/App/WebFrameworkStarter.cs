@@ -1,14 +1,10 @@
 ﻿using MyWebFramework.HTTP.Models;
 using MyWebFramework.HTTP.Servers;
+using System.Text;
 
-internal class WebFrameworkStarter
+internal class WebFrameworkStarter(IHttpServer httpServer)
 {
-    private readonly IHttpServer httpServer;
-
-    public WebFrameworkStarter(IHttpServer httpServer)
-    {
-        this.httpServer = httpServer;
-    }
+    private readonly IHttpServer httpServer = httpServer;
 
     public async Task StartAsync()
     {
@@ -21,16 +17,31 @@ internal class WebFrameworkStarter
 
     private HttpResponse HomePage(HttpRequest request)
     {
-        throw new NotImplementedException();
+        var html = $"<h1>Home page from VaskoServer {DateTime.Now}</h1>";
+
+        var byteBody = Encoding.UTF8.GetBytes(html);
+        var httpResponse = new HttpResponse("text/html; charset=utf-8", byteBody);
+
+        return httpResponse;
     }
 
     private HttpResponse AboutPage(HttpRequest request)
     {
-        throw new NotImplementedException();
+        var html = $"<h1>About Page from VaskoServer {DateTime.Now}</h1>";
+
+        var byteBody = Encoding.UTF8.GetBytes(html);
+        var httpResponse = new HttpResponse("text/html; charset=utf-8", byteBody);
+
+        return httpResponse;
     }
 
     private HttpResponse LoginPage(HttpRequest request)
     {
-        throw new NotImplementedException();
+        var html = $"<h1>Login Page from VaskoServer {DateTime.Now}</h1>";
+
+        var byteBody = Encoding.UTF8.GetBytes(html);
+        var httpResponse = new HttpResponse("text/html; charset=utf-8", byteBody);
+
+        return httpResponse;
     }
 }

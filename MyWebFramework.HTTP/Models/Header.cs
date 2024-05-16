@@ -2,6 +2,12 @@
 {
     public class Header
     {
+        public Header(string name, string value)
+        {
+            this.Name = name;
+            this.Value = value;
+        }
+
         public Header(string line)
         {
             var nameValuePair = line.Split(": ", 2);

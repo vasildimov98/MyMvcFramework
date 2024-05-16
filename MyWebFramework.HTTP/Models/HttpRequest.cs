@@ -11,12 +11,12 @@ namespace MyWebFramework.HTTP.Models
             this.Headers = [];
             this.Cookies = [];
 
-            this.ProcessHttpRequest(httpRequest);
+            this.InitializeRequest(httpRequest);
         }
 
         public HttpMethod Method { get; set; }
 
-        public string? Path { get; set; }
+        public string Path { get; set; }
 
         public ICollection<Header> Headers { get; set; }
 
@@ -24,7 +24,7 @@ namespace MyWebFramework.HTTP.Models
 
         public string? Body { get; set; }
 
-        private void ProcessHttpRequest(string httpRequest)
+        private void InitializeRequest(string httpRequest)
         {
             var lines = httpRequest.Split(HttpConstants.NEW_LINE, StringSplitOptions.None);
 
@@ -56,7 +56,7 @@ namespace MyWebFramework.HTTP.Models
 
             this.TryExtractCookies();
 
-            this.Body = bodyBuilder.ToString().TrimEnd();
+            this.Body = bodyBuilder.ToString();
         }
 
         private void TryExtractCookies()
