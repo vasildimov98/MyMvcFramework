@@ -1,4 +1,4 @@
-﻿namespace MyWebFramework.Common.Builder
+﻿namespace MyWebServer.Common.Builder
 {
     internal interface IBuilder
     {

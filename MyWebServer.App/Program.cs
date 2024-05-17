@@ -1,5 +1,6 @@
-﻿using MyWebFramework.HTTP.Servers;
-using MyWebFramework.Common.Interactors;
+﻿using MyWebFramework.Common.Interactors;
+using MyWebServer.App;
+using MyWebServer.HTTP.Servers;
 
 var consoleUserInteractor = new CosoleUserInteractor();
 

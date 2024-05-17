@@ -1,7 +1,7 @@
-﻿using MyWebFramework.Common.Constant;
+﻿using MyWebServer.Common.Constant;
 using System.Text;
 
-namespace MyWebFramework.Common.Builder
+namespace MyWebServer.Common.Builder
 {
     public class ResponseBuilder : IBuilder
     {
@@ -16,7 +16,7 @@ namespace MyWebFramework.Common.Builder
 
         public ResponseBuilder AppendNewLine()
         {
-            respose.AppendLine(HttpConstants.NEW_LINE);
+            respose.Append(HttpConstants.NEW_LINE);
 
             return this;
         }

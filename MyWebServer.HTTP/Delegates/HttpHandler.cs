@@ -1,7 +1,6 @@
-﻿
-using MyWebFramework.HTTP.Models;
+﻿using MyWebServer.HTTP.Models;
 
-namespace MyWebFramework.HTTP.Delegates
+namespace MyWebServer.HTTP.Delegates
 {
-   public delegate HttpResponse HttpHandler(HttpRequest request);
+    public delegate HttpResponse HttpHandler(HttpRequest request);
 }

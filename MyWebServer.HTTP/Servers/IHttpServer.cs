@@ -1,7 +1,6 @@
-﻿using MyWebFramework.HTTP.Delegates;
-using MyWebFramework.HTTP.Models;
+﻿using MyWebServer.HTTP.Delegates;
 
-namespace MyWebFramework.HTTP.Servers
+namespace MyWebServer.HTTP.Servers
 {
     public interface IHttpServer
     {

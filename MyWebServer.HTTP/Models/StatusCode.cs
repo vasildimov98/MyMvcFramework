@@ -1,4 +1,4 @@
-﻿namespace MyWebFramework.HTTP.Models
+﻿namespace MyWebServer.HTTP.Models
 {
     public enum StatusCode
     {

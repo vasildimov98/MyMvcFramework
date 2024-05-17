@@ -1,19 +1,19 @@
-﻿namespace MyWebFramework.HTTP.Models
+﻿namespace MyWebServer.HTTP.Models
 {
     public class Cookie
     {
         public Cookie(string name, string value)
         {
-            this.Name = name;
-            this.Value = value;
+            Name = name;
+            Value = value;
         }
 
         public Cookie(string cookieAsString)
         {
             var nameValuePair = cookieAsString.Split('=', 2);
 
-            this.Name = nameValuePair[0];
-            this.Value = nameValuePair[1];
+            Name = nameValuePair[0];
+            Value = nameValuePair[1];
         }
 
         public string Name { get; set; }

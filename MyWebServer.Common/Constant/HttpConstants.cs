@@ -1,4 +1,4 @@
-﻿namespace MyWebFramework.Common.Constant
+﻿namespace MyWebServer.Common.Constant
 {
     public static class HttpConstants
     {

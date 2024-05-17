@@ -1,16 +1,12 @@
-﻿using MyWebFramework.Common.Constant;
-using MyWebFramework.Common.Interactors;
-using MyWebFramework.HTTP.Delegates;
-using MyWebFramework.HTTP.Models;
-using MyWebFramework.Common.Builder;
+﻿using MyWebFramework.Common.Interactors;
+using MyWebServer.Common.Constant;
+using MyWebServer.HTTP.Delegates;
+using MyWebServer.HTTP.Models;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
 
-namespace MyWebFramework.HTTP.Servers
+namespace MyWebServer.HTTP.Servers
 {
     public class HttpServer(IUserInteractor userInteractor) : IHttpServer
     {
@@ -61,20 +57,20 @@ namespace MyWebFramework.HTTP.Servers
 
             var httpRequest = new HttpRequest(request);
 
-            userInteractor.ShowMessage(request);
+            userInteractor.ShowMessage($"Request: {httpRequest.Method} {httpRequest.Path} => {httpRequest.Headers.Count()}");
 
             userInteractor.ShowMessage(new string('=', 100));
 
-            var response = await SendReponseAsync(stream, httpRequest);
+            var httpResponse = await SendReponseAsync(stream, httpRequest);
 
-            userInteractor.ShowMessage(response);
+            userInteractor.ShowMessage($"Response: {httpResponse.StatusCode} => {httpRequest.Headers.Count()}");
 
             userInteractor.ShowMessage(new string('=', 100));
 
             client.Close();
         }
 
-        private async Task<string> SendReponseAsync(NetworkStream stream, HttpRequest request)
+        private async Task<HttpResponse> SendReponseAsync(NetworkStream stream, HttpRequest request)
         {
             HttpResponse httpResponse;
             if (!routesTable.TryGetValue(request.Path, out HttpHandler? value))
@@ -82,30 +78,28 @@ namespace MyWebFramework.HTTP.Servers
                 var notFoundHtml = "<h1>Page Not Found</h1>";
                 var notFoundByte = Encoding.UTF8.GetBytes(notFoundHtml);
                 httpResponse = new HttpResponse("text/html; charset=utf-8", notFoundByte, StatusCode.NotFound);
-            } 
+            }
             else
             {
                 var action = value;
 
                 httpResponse = action(request);
-
-                httpResponse.Headers.Add(new Header("Server", "VaskoServer 2024"));
-
-                //httpResponse.Cookies.Add(new ResponseCookie("sid", Guid.NewGuid().ToString())
-                //{
-                //    MaxAge = 4 * 24 * 60 * 60 * 60,
-                //    HttpOnly = true
-                //});
             }
 
-            var responseAsString = httpResponse.ToString();
+            httpResponse.Headers.Add(new Header("Server", "VaskoServer 2024"));
 
-            var byteResponse = Encoding.UTF8.GetBytes(responseAsString);
+            httpResponse.Cookies.Add(new ResponseCookie("sid", Guid.NewGuid().ToString())
+            {
+                MaxAge = 4 * 24 * 60 * 60 * 60,
+                HttpOnly = true
+            });
+
+            var byteResponse = Encoding.UTF8.GetBytes(httpResponse.ToString());
 
             await stream.WriteAsync(byteResponse.AsMemory(0, byteResponse.Length));
             await stream.WriteAsync(httpResponse.Body.AsMemory(0, httpResponse.Body.Length));
 
-            return responseAsString;
+            return httpResponse;
         }
 
         private static async Task<string> GetRequestAsync(NetworkStream stream)
@@ -119,7 +113,7 @@ namespace MyWebFramework.HTTP.Servers
                 var countOfDataRead = await stream.ReadAsync(buffer.AsMemory(position, buffer.Length));
                 position += countOfDataRead;
 
-                if (countOfDataRead < buffer.Length) 
+                if (countOfDataRead < buffer.Length)
                 {
                     var partialBuffer = new byte[countOfDataRead];
                     Array.Copy(buffer, partialBuffer, countOfDataRead);

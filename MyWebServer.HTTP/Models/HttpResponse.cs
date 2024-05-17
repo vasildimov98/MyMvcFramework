@@ -1,35 +1,34 @@
-﻿
-using MyWebFramework.Common.Builder;
+﻿using MyWebServer.Common.Builder;
 
-namespace MyWebFramework.HTTP.Models
+namespace MyWebServer.HTTP.Models
 {
     public class HttpResponse
     {
         public HttpResponse(string contentType, byte[] body, StatusCode code = StatusCode.OK)
         {
-            this.InializeResponse(code, contentType, body);
+            InializeResponse(code, contentType, body);
         }
 
         public StatusCode StatusCode { get; set; }
 
-        public ICollection<Header> Headers { get; set; }
+        public ICollection<Header>? Headers { get; set; }
 
         public ICollection<ResponseCookie> Cookies { get; set; } = [];
 
-        public byte[] Body { get; set; }
+        public byte[]? Body { get; set; }
 
         public override string ToString()
         {
             var response = new ResponseBuilder()
-                .AppendLine($"HTTP/1.1 {(int)this.StatusCode} {this.StatusCode}");
+                .AppendLine($"HTTP/1.1 {(int)StatusCode} {StatusCode}");
 
-            foreach (var header in this.Headers)
+            foreach (var header in Headers)
             {
                 response
                     .AppendLine(header.ToString());
             }
 
-            foreach (var cookie in this.Cookies)
+            foreach (var cookie in Cookies)
             {
                 response
                     .AppendLine(cookie.ToString());
@@ -42,12 +41,12 @@ namespace MyWebFramework.HTTP.Models
 
         private void InializeResponse(StatusCode code, string contentType, byte[] body)
         {
-            this.StatusCode = code;
-            this.Headers = [
-                    new Header("Content-Type",  contentType),
-                    new Header("Content-Length", body.Length.ToString())
+            StatusCode = code;
+            Headers = [
+                    new Header("Content-Type", contentType) ,
+                    new Header("Content-Length", body.Length.ToString()),
                 ];
-            this.Body = body;
+            Body = body;
         }
     }
 }

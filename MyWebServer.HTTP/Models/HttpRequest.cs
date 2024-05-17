@@ -1,17 +1,16 @@
-﻿
-using MyWebFramework.Common.Constant;
+﻿using MyWebServer.Common.Constant;
 using System.Text;
 
-namespace MyWebFramework.HTTP.Models
+namespace MyWebServer.HTTP.Models
 {
     public class HttpRequest
     {
         public HttpRequest(string httpRequest)
         {
-            this.Headers = [];
-            this.Cookies = [];
+            Headers = [];
+            Cookies = [];
 
-            this.InitializeRequest(httpRequest);
+            InitializeRequest(httpRequest);
         }
 
         public HttpMethod Method { get; set; }
@@ -30,8 +29,8 @@ namespace MyWebFramework.HTTP.Models
 
             var firstLineParts = lines[0].Split(" ");
 
-            this.Method = Enum.Parse<HttpMethod>(firstLineParts[0], true);
-            this.Path = firstLineParts[1];
+            Method = Enum.Parse<HttpMethod>(firstLineParts[0], true);
+            Path = firstLineParts[1];
 
             var isHeader = true;
             var bodyBuilder = new StringBuilder();
@@ -47,21 +46,21 @@ namespace MyWebFramework.HTTP.Models
 
                 if (isHeader)
                 {
-                    this.Headers.Add(new Header(line));
+                    Headers.Add(new Header(line));
                     continue;
                 }
 
                 bodyBuilder.AppendLine(line);
             }
 
-            this.TryExtractCookies();
+            TryExtractCookies();
 
-            this.Body = bodyBuilder.ToString();
+            Body = bodyBuilder.ToString();
         }
 
         private void TryExtractCookies()
         {
-            var cookieHeader = this.Headers.FirstOrDefault(x => x.Name == HttpConstants.REQUEST_COOKIE_HEADER);
+            var cookieHeader = Headers.FirstOrDefault(x => x.Name == HttpConstants.REQUEST_COOKIE_HEADER);
 
             if (cookieHeader == null)
             {
@@ -70,9 +69,9 @@ namespace MyWebFramework.HTTP.Models
 
             var cookies = cookieHeader.Value.Split("; ", StringSplitOptions.RemoveEmptyEntries);
 
-            foreach ( var cookie in cookies)
+            foreach (var cookie in cookies)
             {
-                this.Cookies.Add(new Cookie(cookie.Trim()));
+                Cookies.Add(new Cookie(cookie.Trim()));
             }
 
         }

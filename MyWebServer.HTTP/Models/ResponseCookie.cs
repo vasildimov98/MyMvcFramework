@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace MyWebFramework.HTTP.Models
+namespace MyWebServer.HTTP.Models
 {
     public class ResponseCookie(string name, string value) : Cookie(name, value)
     {
@@ -14,14 +14,14 @@ namespace MyWebFramework.HTTP.Models
         {
             var cookieBuilder = new StringBuilder();
 
-            cookieBuilder.Append($"Set-Cookie: {base.ToString()}; Path={this.Path};");
+            cookieBuilder.Append($"Set-Cookie: {base.ToString()}; Path={Path};");
 
-            if (MaxAge != 0 )
+            if (MaxAge != 0)
             {
-                cookieBuilder.Append($" Max-Age={this.MaxAge};");
+                cookieBuilder.Append($" Max-Age={MaxAge};");
             }
 
-            if (this.HttpOnly) 
+            if (HttpOnly)
             {
                 cookieBuilder.Append(" HttpOnly;");
             }
