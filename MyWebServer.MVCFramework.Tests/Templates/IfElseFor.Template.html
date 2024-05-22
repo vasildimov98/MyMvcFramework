@@ -1,0 +1,13 @@
+﻿<ul>
+    @for(var i = 1; i <= 20; i+=2)
+    {
+        @if(i % 3 == 0)
+        {
+            <li>@i</li>
+        }
+    }
+</ul>
+@if(DateTime.UtcNow.Year >= 2020)
+{
+    <div>Welcome to the Year of @DateTime.UtcNow.Year!</div>
+}

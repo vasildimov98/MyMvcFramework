@@ -1,11 +1,6 @@
-﻿using MyWebFramework.Common.Interactors;
-using MyWebServer.App;
-using MyWebServer.HTTP.Servers;
+﻿using MyWebServer.App;
+using MyWebServer.MVCFramework;
 
-var consoleUserInteractor = new CosoleUserInteractor();
+await Host.CreateHostAsync(new StartUp(), 800);
 
-var httpServer = new HttpServer(consoleUserInteractor);
 
-var startUp = new StartUp(httpServer);
-
-await startUp.StartAsync();

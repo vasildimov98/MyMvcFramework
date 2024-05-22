@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyWebServer.HTTP", "MyWebSe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyWebServer.MVCFramework", "MyWebServer.MVCFramework\MyWebServer.MVCFramework.csproj", "{73B8319C-B853-42EB-A92C-CDC135CB03A7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyWebServer.MVCFramework.Tests", "MyWebServer.MVCFramework.Tests\MyWebServer.MVCFramework.Tests.csproj", "{AAD7DFA6-3348-41E0-8ECE-FBA11F8ADD88}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{73B8319C-B853-42EB-A92C-CDC135CB03A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73B8319C-B853-42EB-A92C-CDC135CB03A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73B8319C-B853-42EB-A92C-CDC135CB03A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAD7DFA6-3348-41E0-8ECE-FBA11F8ADD88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAD7DFA6-3348-41E0-8ECE-FBA11F8ADD88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAD7DFA6-3348-41E0-8ECE-FBA11F8ADD88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAD7DFA6-3348-41E0-8ECE-FBA11F8ADD88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

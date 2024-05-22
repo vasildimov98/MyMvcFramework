@@ -8,22 +8,10 @@ using System.Text;
 
 namespace MyWebServer.HTTP.Servers
 {
-    public class HttpServer(IUserInteractor userInteractor) : IHttpServer
+    public class HttpServer(IList<Route> routes, IUserInteractor userInteractor) : IHttpServer
     {
-        private readonly IDictionary<string, HttpHandler> routesTable
-            = new Dictionary<string, HttpHandler>();
+        private readonly IList<Route> routes = routes;
         private readonly IUserInteractor userInteractor = userInteractor;
-
-        public void AddRoute(string url, HttpHandler handler)
-        {
-            if (!routesTable.ContainsKey(url))
-            {
-                routesTable.Add(url, handler);
-                return;
-            }
-
-            routesTable[url] = handler;
-        }
 
         public async Task StartListeningAsync(int port)
         {
@@ -73,7 +61,12 @@ namespace MyWebServer.HTTP.Servers
         private async Task<HttpResponse> SendReponseAsync(NetworkStream stream, HttpRequest request)
         {
             HttpResponse httpResponse;
-            if (!routesTable.TryGetValue(request.Path, out HttpHandler? value))
+            var route = routes
+                .FirstOrDefault(x => 
+                    string.Compare(x.Url, request.Path, true) == 0 &&
+                    x.Method == request.Method);
+
+            if (route == null)
             {
                 var notFoundHtml = "<h1>Page Not Found</h1>";
                 var notFoundByte = Encoding.UTF8.GetBytes(notFoundHtml);
@@ -81,9 +74,7 @@ namespace MyWebServer.HTTP.Servers
             }
             else
             {
-                var action = value;
-
-                httpResponse = action(request);
+                httpResponse = route.Handler(request);
             }
 
             httpResponse.Headers.Add(new Header("Server", "VaskoServer 2024"));

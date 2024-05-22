@@ -1,71 +1,26 @@
-﻿using MyWebServer.HTTP.Models;
-using MyWebServer.HTTP.Servers;
-using System.Text;
+﻿using MyWebServer.App.Controllers;
+using MyWebServer.HTTP.Models;
+using MyWebServer.MVCFramework;
 
 namespace MyWebServer.App
 {
-    internal class StartUp(IHttpServer httpServer)
+    public class StartUp : IMVCApplication
     {
-        private readonly IHttpServer httpServer = httpServer;
-
-        public async Task StartAsync()
+        public void Configure(List<Route> routeTable)
         {
-            httpServer.AddRoute("/", HomePage);
-            httpServer.AddRoute("/about", AboutPage);
-            httpServer.AddRoute("/login", LoginPage);
-            httpServer.AddRoute("/register", RegisterPage);
-            httpServer.AddRoute("/favicon.ico", Favicon);
+            routeTable.Add(new Route("/", HTTP.Models.HttpMethod.Get, new HomeController().Index));
+            routeTable.Add(new Route("/users/login", HTTP.Models.HttpMethod.Get, new UsersController().Login));
+            routeTable.Add(new Route("/users/register", HTTP.Models.HttpMethod.Get, new UsersController().Register));
+            routeTable.Add(new Route("/trips/all", HTTP.Models.HttpMethod.Get, new TripsController().All));
+            routeTable.Add(new Route("/trips/add", HTTP.Models.HttpMethod.Get, new TripsController().Add));
+            routeTable.Add(new Route("/trips/details", HTTP.Models.HttpMethod.Get, new TripsController().Details));
 
-            await httpServer.StartListeningAsync(80);
+            routeTable.Add(new Route("/favicon.ico", HTTP.Models.HttpMethod.Get, new StaticContoller().Favicon));
+            routeTable.Add(new Route("/css/bootstrap.css", HTTP.Models.HttpMethod.Get, new StaticContoller().Bootstrap));
         }
 
-        private HttpResponse HomePage(HttpRequest request)
+        public void ConfigureServices()
         {
-            var html = $"<h1>Home page from VaskoServer {DateTime.Now}</h1>";
-
-            var byteBody = Encoding.UTF8.GetBytes(html);
-            var httpResponse = new HttpResponse("text/html; charset=utf-8", byteBody);
-
-            return httpResponse;
-        }
-
-        private HttpResponse AboutPage(HttpRequest request)
-        {
-            var html = $"<h1>About Page from VaskoServer {DateTime.Now}</h1>";
-
-            var byteBody = Encoding.UTF8.GetBytes(html);
-            var httpResponse = new HttpResponse("text/html", byteBody);
-
-            return httpResponse;
-        }
-
-        private HttpResponse LoginPage(HttpRequest request)
-        {
-            var html = $"<h1>Login Page from VaskoServer {DateTime.Now}</h1>";
-
-            var byteBody = Encoding.UTF8.GetBytes(html);
-            var httpResponse = new HttpResponse("text/html", byteBody);
-
-            return httpResponse;
-        }
-
-        private HttpResponse RegisterPage(HttpRequest request)
-        {
-            var html = $"<h1>Register Page from VaskoServer {DateTime.Now}</h1>";
-
-            var byteBody = Encoding.UTF8.GetBytes(html);
-            var httpResponse = new HttpResponse("text/html", byteBody);
-
-            return httpResponse;
-        }
-
-        private HttpResponse Favicon(HttpRequest request)
-        {
-            var fileBytes = File.ReadAllBytes("wwwroot/favicon.ico");
-
-            var response = new HttpResponse("image/vnd.microsoft.icon", fileBytes);
-
-            return response;
         }
     }
 }
