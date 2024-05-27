@@ -1,6 +1,6 @@
 ﻿namespace MyWebServer.MVCFramework.ViewEngine
 {
-    internal interface IView
+    public interface IView
     {
         string ExecuteTemplate(object model);
     }

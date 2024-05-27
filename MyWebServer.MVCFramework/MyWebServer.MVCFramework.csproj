@@ -7,6 +7,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2" />
+	  <PackageReference Include="MimeTypesMap" Version="1.0.8" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\MyWebServer.Common\MyWebServer.Common.csproj" />
 		<ProjectReference Include="..\MyWebServer.HTTP\MyWebServer.HTTP.csproj" />
 	</ItemGroup>

@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MyWebServer.Common\MyWebServer.Common.csproj" />
     <ProjectReference Include="..\MyWebServer.MVCFramework\MyWebServer.MVCFramework.csproj" />
   </ItemGroup>
 

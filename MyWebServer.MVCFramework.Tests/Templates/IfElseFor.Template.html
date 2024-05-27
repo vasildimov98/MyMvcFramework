@@ -3,11 +3,11 @@
     {
         @if(i % 3 == 0)
         {
-            <li>@i</li>
+    <li>@i <span>@(i+1)</span></li>
         }
     }
 </ul>
 @if(DateTime.UtcNow.Year >= 2020)
 {
-    <div>Welcome to the Year of @DateTime.UtcNow.Year!</div>
+<div>Welcome to the Year of @DateTime.UtcNow.Year!</div>
 }

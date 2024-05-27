@@ -6,12 +6,12 @@ namespace MyWebServer.App.Controllers
 {
     internal class UsersController : Controller
     {
-        public HttpResponse Login(HttpRequest request)
+        public HttpResponse Login()
         {
             return View();
         }
 
-        public HttpResponse Register(HttpRequest request)
+        public HttpResponse Register()
         {
             return this.View();
         }

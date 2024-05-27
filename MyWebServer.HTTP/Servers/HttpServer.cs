@@ -1,5 +1,5 @@
 ﻿using MyWebFramework.Common.Interactors;
-using MyWebServer.Common.Constant;
+using MyWebServer.Common.Constants;
 using MyWebServer.HTTP.Delegates;
 using MyWebServer.HTTP.Models;
 using System.Net;

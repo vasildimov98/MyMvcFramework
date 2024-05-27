@@ -5,17 +5,17 @@ namespace MyWebServer.App.Controllers
 {
     public class TripsController : Controller
     {
-        public HttpResponse All(HttpRequest request)
+        public HttpResponse All()
         {
             return this.View();
         }
 
-        public HttpResponse Add(HttpRequest request) 
+        public HttpResponse Add() 
         {
             return this.View();
         }
 
-       public HttpResponse Details(HttpRequest request)
+       public HttpResponse Details()
         {
             return this.View();
         }

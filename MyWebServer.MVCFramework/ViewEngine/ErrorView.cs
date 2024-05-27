@@ -18,7 +18,17 @@ namespace MyWebServer.MVCFramework.ViewEngine
         {
             var html = new StringBuilder();
 
-            html.AppendLine($"<h1>View Compile Errors ({this.errors.Count()})")
+            html.AppendLine($"<h1>View Compile Errors (Count: {this.errors.Count()}):</h1><ul>");
+
+            foreach (var error in errors)
+            {
+                html.AppendLine($"<li>{error}</li>");
+            }
+
+            html
+                .AppendLine($"</ul><pre>{this.chsarpCode}</pre>");
+
+            return html.ToString();
         }
     }
 }
