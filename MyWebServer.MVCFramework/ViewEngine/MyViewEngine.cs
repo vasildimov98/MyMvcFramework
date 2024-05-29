@@ -10,7 +10,7 @@ namespace MyWebServer.MVCFramework.ViewEngine
 {
     public class MyViewEngine : IViewEngine
     {
-        public string GenerateHTML(string template, object model)
+        public string GenerateHTML(string template, object? model)
         {
             var csharpCode = GenerateCSharpCodeFrom(template, model);
 
@@ -19,7 +19,7 @@ namespace MyWebServer.MVCFramework.ViewEngine
             return viewObject.ExecuteTemplate(model);
         }
 
-        private static string GenerateCSharpCodeFrom(string template, object model)
+        private static string GenerateCSharpCodeFrom(string template, object? model)
         {
             var modelType = "object";
             
@@ -39,7 +39,7 @@ namespace MyWebServer.MVCFramework.ViewEngine
                 var genericArguments = model
                     .GetType().GenericTypeArguments;
 
-                modelType = modelName[..modelName
+                modelType = modelName![..modelName!
                     .IndexOf('`')] + $"<{string
                         .Join(',', genericArguments
                             .Select(x => x.FullName))}>";
@@ -136,7 +136,7 @@ namespace MyWebServer.MVCFramework.ViewEngine
             return csharpCode.ToString().TrimEnd();
         }
 
-        private static IView GenerateViewObjectFrom(string csharpCode, object model)
+        private static IView GenerateViewObjectFrom(string csharpCode, object? model)
         {
             var cSharpCompilation = CSharpCompilation
                 .Create("ViewAssembly")

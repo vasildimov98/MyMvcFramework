@@ -4,6 +4,11 @@ namespace MyWebServer.HTTP.Models
 {
     public class HttpResponse
     {
+        public HttpResponse(StatusCode code)
+        {
+            this.StatusCode = code;
+        }
+
         public HttpResponse(string contentType, byte[] body, StatusCode code = StatusCode.OK)
         {
             InializeResponse(code, contentType, body);
@@ -11,11 +16,11 @@ namespace MyWebServer.HTTP.Models
 
         public StatusCode StatusCode { get; set; }
 
-        public ICollection<Header>? Headers { get; set; }
+        public ICollection<Header>? Headers { get; set; } = [];
 
         public ICollection<ResponseCookie> Cookies { get; set; } = [];
 
-        public byte[]? Body { get; set; }
+        public byte[]? Body { get; set; } = [];
 
         public override string ToString()
         {

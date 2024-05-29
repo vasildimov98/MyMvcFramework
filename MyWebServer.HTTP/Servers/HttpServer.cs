@@ -77,18 +77,25 @@ namespace MyWebServer.HTTP.Servers
                 httpResponse = route.Handler(request);
             }
 
-            httpResponse.Headers.Add(new Header("Server", "VaskoServer 2024"));
+            httpResponse.Headers!.Add(new Header("Server", "VaskoServer 2024"));
 
-            httpResponse.Cookies.Add(new ResponseCookie("sid", Guid.NewGuid().ToString())
+            var sessionCookie = request.Cookies
+               .FirstOrDefault(x => x.Name == HttpConstants.SESSION_COOKIE_NAME);
+
+            if (sessionCookie != null)
             {
-                MaxAge = 4 * 24 * 60 * 60 * 60,
-                HttpOnly = true
-            });
+                var responseCookie =
+                    new ResponseCookie(
+                        sessionCookie.Name, 
+                        sessionCookie.Value);
+                httpResponse.Cookies
+                    .Add(responseCookie);
+            }
 
             var byteResponse = Encoding.UTF8.GetBytes(httpResponse.ToString());
 
             await stream.WriteAsync(byteResponse.AsMemory(0, byteResponse.Length));
-            await stream.WriteAsync(httpResponse.Body.AsMemory(0, httpResponse.Body.Length));
+            await stream.WriteAsync(httpResponse.Body.AsMemory(0, httpResponse.Body!.Length));
 
             return httpResponse;
         }

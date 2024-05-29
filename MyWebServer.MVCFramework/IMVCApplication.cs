@@ -6,6 +6,6 @@ namespace MyWebServer.MVCFramework
     {
         void ConfigureServices();
 
-        void Configure(List<Route> routes);
+        Task Configure(List<Route> routes);
     }
 }

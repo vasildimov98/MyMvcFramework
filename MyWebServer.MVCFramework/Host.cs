@@ -5,6 +5,7 @@ using MyWebServer.HTTP.Models;
 using MyWebServer.HTTP.Servers;
 using MyWebServer.MVCFramework.Attributes;
 using System.Reflection;
+
 using HttpMethod = MyWebServer.HTTP.Models.HttpMethod;
 
 namespace MyWebServer.MVCFramework
@@ -26,7 +27,7 @@ namespace MyWebServer.MVCFramework
                 consoleUserInteractor.ShowMessage($"{route.Method} => {route.Url}");
             }
 
-            application.Configure(routes);
+            await application.Configure(routes);
             application.ConfigureServices();
 
             var server = new HttpServer(routes, consoleUserInteractor);

@@ -67,7 +67,7 @@ namespace MyWebServer.MVCFramework.Tests
 
     public class TestTemplateModel
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         public decimal Price { get; set; }
 

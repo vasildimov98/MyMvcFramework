@@ -2,6 +2,6 @@
 {
     public interface IView
     {
-        string ExecuteTemplate(object model);
+        string ExecuteTemplate(object? model);
     }
 }
