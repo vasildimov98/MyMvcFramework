@@ -34,6 +34,9 @@
     <None Update="Views\Home\Index.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Views\Shared\Error.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Views\Shared\Layout.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

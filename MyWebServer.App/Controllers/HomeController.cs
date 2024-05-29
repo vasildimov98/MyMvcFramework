@@ -10,20 +10,13 @@ namespace MyWebServer.App.Controllers
         [HttpGet("/")]
         public HttpResponse Index()
         {
-            var homeModel = new HomeViewModel
-            {
-                SessionText = this.Request.Session.ContainsKey("about") ?
-                    "Hello from about" :
-                    "I have not been to about page yet!"
-            };
-
-            return this.View(homeModel);
+            return this.View();
         }
 
         [HttpGet("/about")]
         public HttpResponse About()
         {
-            this.Request.Session["about"] = "YES!";
+            this.SignIn("vasko");
             return this.View();
         }
     }

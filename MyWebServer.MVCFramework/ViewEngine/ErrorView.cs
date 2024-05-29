@@ -14,7 +14,7 @@ namespace MyWebServer.MVCFramework.ViewEngine
             this.chsarpCode = csharpCode;
         }
 
-        public string ExecuteTemplate(object model)
+        public string ExecuteTemplate(object model, string? user = null)
         {
             var html = new StringBuilder();
 

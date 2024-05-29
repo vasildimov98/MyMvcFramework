@@ -29,7 +29,8 @@ namespace MyWebServer.HTTP.Models
 
         private void InitializeRequest(string httpRequest)
         {
-            var lines = httpRequest.Split(HttpConstants.NEW_LINE, StringSplitOptions.None);
+            var lines = httpRequest
+                .Split(HttpConstants.NEW_LINE, StringSplitOptions.None);
 
             var firstLineParts = lines[0].Split(" ");
 
@@ -81,7 +82,7 @@ namespace MyWebServer.HTTP.Models
                 bodyBuilder.AppendLine(lines[i]);
             }
 
-            return bodyBuilder.ToString();
+            return bodyBuilder.ToString().TrimEnd('\r', '\n');
         }
 
         private int AddHeaders(string[] lines)

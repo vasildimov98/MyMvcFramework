@@ -2,6 +2,6 @@
 {
     internal interface IViewEngine
     {
-        string GenerateHTML(string templateCode, object model);
+        string GenerateHTML(string templateCode, object model, string? user = null);
     }
 }

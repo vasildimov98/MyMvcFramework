@@ -1,7 +1,5 @@
 ﻿using MyWebServer.HTTP.Models;
 using MyWebServer.MVCFramework.ViewEngine;
-using System.Net;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -9,11 +7,13 @@ namespace MyWebServer.MVCFramework
 {
     public class Controller
     {
+        private const string SesssionUserId = "UserId";
+
         private readonly MyViewEngine _viewEngine = new();
 
         protected HttpRequest? Request { get; set; }
 
-        protected HttpResponse View(object? model = null, [CallerMemberName]string viewName = "")
+        protected HttpResponse View(object? model = null, [CallerMemberName] string viewName = "")
         {
             var view = System.IO.File
               .ReadAllText($"Views/{this
@@ -22,7 +22,7 @@ namespace MyWebServer.MVCFramework
 
             string sharedBody = PutViewInLayout(view);
 
-            var responseHtml = this._viewEngine.GenerateHTML(sharedBody, model);
+            var responseHtml = this._viewEngine.GenerateHTML(sharedBody, model, this.GetUserId());
 
             var htmlBytes = Encoding.UTF8
                 .GetBytes(responseHtml);
@@ -32,17 +32,6 @@ namespace MyWebServer.MVCFramework
             return httpResponse;
         }
 
-        private string PutViewInLayout(string view)
-        {
-            var layout = System.IO.File
-                            .ReadAllText("Views/Shared/Layout.cshtml");
-
-            layout = layout
-                .Replace("@RenderBody()", view);
-
-            return layout;
-        }
-
         protected HttpResponse Redirect(string url)
         {
             var httpResponse = new HttpResponse(StatusCode.Found);
@@ -50,9 +39,9 @@ namespace MyWebServer.MVCFramework
             return httpResponse;
         }
 
-        protected HttpResponse Error(string message, object model = null)
+        protected HttpResponse Error(object model = null)
         {
-            var viewContent = $"<div class=\"alert alert-danger\" role=\"alert\">{message}</div>";
+            var viewContent = System.IO.File.ReadAllText("Views/Shared/Error.cshtml");
             var layout = this.PutViewInLayout(viewContent);
             var responseHtml = this._viewEngine.GenerateHTML(layout, model);
             var responseBodyBytes = Encoding.UTF8
@@ -72,6 +61,42 @@ namespace MyWebServer.MVCFramework
 
             var response = new HttpResponse(contentType, fileBytes);
             return response;
+        }
+
+        protected void SignIn(string userId) =>
+            this.Request.Session[SesssionUserId] = userId;
+
+        protected void SingOut()
+        {
+            if (this.IsUserSignedIn())
+            {
+                this.Request!.Session[SesssionUserId] = null; 
+            }
+        }
+
+        protected bool IsUserSignedIn() =>
+            this.Request!.Session.ContainsKey(SesssionUserId)
+            && this.Request.Session[SesssionUserId] != null;
+
+        protected string? GetUserId()
+        {
+            if (this.IsUserSignedIn())
+            {
+                return this.Request!.Session[SesssionUserId];
+            }
+
+            return null;
+        }
+
+        private string PutViewInLayout(string view)
+        {
+            var layout = System.IO.File
+                            .ReadAllText("Views/Shared/Layout.cshtml");
+
+            layout = layout
+                .Replace("@RenderBody()", view);
+
+            return layout;
         }
     }
 }

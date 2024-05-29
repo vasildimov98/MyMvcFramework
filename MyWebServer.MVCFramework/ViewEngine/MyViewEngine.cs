@@ -10,26 +10,26 @@ namespace MyWebServer.MVCFramework.ViewEngine
 {
     public class MyViewEngine : IViewEngine
     {
-        public string GenerateHTML(string template, object? model)
+        public string GenerateHTML(string template, object? model, string? userId = null)
         {
             var csharpCode = GenerateCSharpCodeFrom(template, model);
 
             var viewObject = GenerateViewObjectFrom(csharpCode, model);
 
-            return viewObject.ExecuteTemplate(model);
+            return viewObject.ExecuteTemplate(model, userId);
         }
 
         private static string GenerateCSharpCodeFrom(string template, object? model)
         {
             var modelType = "object";
-            
+
             if (model != null && !model
                 .GetType().IsGenericType)
             {
                 modelType = model
-                    .GetType().FullName; 
+                    .GetType().FullName;
             }
-            
+
             if (model != null && model
                 .GetType().IsGenericType)
             {
@@ -55,9 +55,11 @@ namespace MyWebServer.MVCFramework.ViewEngine
                 {
                     public class View : IView 
                     {
-                        public string ExecuteTemplate(object model)
+                        public string ExecuteTemplate(object model, string user)
                         {
-                            var Model = model as " + modelType +  @";
+                            var User = user;
+
+                            var Model = model as " + modelType + @";
 
                             var htmlBuilder = new StringBuilder();
 
@@ -152,6 +154,19 @@ namespace MyWebServer.MVCFramework.ViewEngine
 
             if (model != null)
             {
+                var modelType = model.GetType();
+
+                if (modelType.IsGenericType)
+                {
+                    var genericArguments = modelType.GetGenericArguments();
+
+                    foreach (var genericArgument in genericArguments)
+                    {
+                        cSharpCompilation = cSharpCompilation
+                            .AddReferences(MetadataReference.CreateFromFile(genericArgument.FullName));
+                    }
+                }
+
                 cSharpCompilation = cSharpCompilation
                     .AddReferences(MetadataReference
                         .CreateFromFile(model
