@@ -1,5 +1,4 @@
-﻿using MyWebServer.App.ViewModels;
-using MyWebServer.HTTP.Models;
+﻿using MyWebServer.HTTP.Models;
 using MyWebServer.MVCFramework;
 using MyWebServer.MVCFramework.Attributes;
 
@@ -10,13 +9,6 @@ namespace MyWebServer.App.Controllers
         [HttpGet("/")]
         public HttpResponse Index()
         {
-            return this.View();
-        }
-
-        [HttpGet("/about")]
-        public HttpResponse About()
-        {
-            this.SignIn("vasko");
             return this.View();
         }
     }
