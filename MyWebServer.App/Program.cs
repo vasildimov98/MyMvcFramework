@@ -1,6 +1,14 @@
 ﻿using MyWebServer.App;
 using MyWebServer.MVCFramework;
 
-await Host.CreateHostAsync(new StartUp(), 800);
+try
+{
+    await Host.CreateHostAsync(new StartUp(), 800);
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex.ToString());       
+}
+
 
 

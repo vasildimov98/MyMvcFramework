@@ -6,9 +6,9 @@ using MyWebServer.MVCFramework.Attributes;
 
 namespace MyWebServer.App.Controllers
 {
-    public class TripsController : Controller
+    public class TripsController(SharedTripContext sharedTripContext) : Controller
     {
-        private readonly SharedTripContext sharedTripContext = new();
+        private readonly SharedTripContext sharedTripContext = sharedTripContext;
 
         public HttpResponse All()
         {

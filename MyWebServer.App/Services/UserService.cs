@@ -5,9 +5,9 @@ using System.Text;
 
 namespace MyWebServer.App.Services
 {
-    public class UserService : IUserService
+    public class UserService(SharedTripContext context) : IUserService
     {
-        private readonly SharedTripContext sharedTripContext = new();
+        private readonly SharedTripContext sharedTripContext = context;
 
         public void CreateUser(string username, string email, string password)
         {

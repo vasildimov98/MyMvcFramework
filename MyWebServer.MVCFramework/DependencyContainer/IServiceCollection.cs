@@ -1,6 +1,9 @@
-﻿namespace MyWebServer.MVCFramework
+﻿namespace MyWebServer.MVCFramework.DependencyContainer
 {
-    internal interface IServiceCollection
+    public interface IServiceCollection
     {
+        public void Add<TSource, TDesctination>();
+
+        public object CreateInstance(Type type);
     }
 }

@@ -1,4 +1,5 @@
-﻿using MyWebServer.App.Services;
+﻿using MyWebServer.App.Data;
+using MyWebServer.App.Services;
 using MyWebServer.HTTP.Models;
 using MyWebServer.MVCFramework;
 using MyWebServer.MVCFramework.Attributes;
@@ -6,9 +7,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MyWebServer.App.Controllers
 {
-    internal class UsersController : Controller
+    internal class UsersController(IUserService userService) : Controller
     {
-        private readonly UserService _userService = new();
+        private readonly IUserService _userService = userService;
 
         public HttpResponse Login()
         {

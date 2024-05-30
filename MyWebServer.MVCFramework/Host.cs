@@ -4,6 +4,7 @@ using MyWebFramework.Common.Interactors;
 using MyWebServer.HTTP.Models;
 using MyWebServer.HTTP.Servers;
 using MyWebServer.MVCFramework.Attributes;
+using MyWebServer.MVCFramework.DependencyContainer;
 using System.Reflection;
 
 using HttpMethod = MyWebServer.HTTP.Models.HttpMethod;
@@ -15,11 +16,17 @@ namespace MyWebServer.MVCFramework
         public static async Task CreateHostAsync(IMVCApplication application, int port)
         {
             var consoleUserInteractor = new CosoleUserInteractor();
+            var serviceCollection = new ServiceCollection();
 
             var routes = new List<Route>();
 
+            await application.Configure(routes);
+            application.ConfigureServices(serviceCollection);
+
             RegisterStaticFiles(routes);
-            RegisterControllerRoutes(routes, application);
+            RegisterControllerRoutes(routes, application, serviceCollection);
+
+            var server = new HttpServer(routes, consoleUserInteractor);
 
             consoleUserInteractor.ShowMessage("Register Routes:");
             foreach (var route in routes)
@@ -27,16 +34,11 @@ namespace MyWebServer.MVCFramework
                 consoleUserInteractor.ShowMessage($"{route.Method} => {route.Url}");
             }
 
-            await application.Configure(routes);
-            application.ConfigureServices();
-
-            var server = new HttpServer(routes, consoleUserInteractor);
-
             await server
                 .StartListeningAsync(port);
         }
 
-        private static void RegisterControllerRoutes(List<Route> routes, IMVCApplication application)
+        private static void RegisterControllerRoutes(List<Route> routes, IMVCApplication application, IServiceCollection serviceCollection)
         {
 
             var controllerTypes = application
@@ -78,7 +80,7 @@ namespace MyWebServer.MVCFramework
 
                     routes.Add(new Route(url!, httpMethod, (request) =>
                     {
-                        var instance = Activator.CreateInstance(controllerType) as Controller;
+                        var instance = serviceCollection.CreateInstance(controllerType) as Controller;
 
                         var requestProp = controllerType
                             .GetProperty("Request", BindingFlags.Instance | BindingFlags.NonPublic);
